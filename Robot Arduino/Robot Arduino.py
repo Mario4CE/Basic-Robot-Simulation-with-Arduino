@@ -19,12 +19,14 @@ Bibliotecas usadas
 """
 import csv  # Funcion donde se guardara la informacion del robot
 import os  # Ubicacio de archivos
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk # Libreria para manejar imagenes
 import time  # Funcion para el tiempo
 from tkinter import *  # Interfaz grafica
 from tkinter import PhotoImage, messagebox, ttk  # interfaz grafica
-import PIL.Image
+import PIL.Image # Libreria para manejar imagenes
 import pygame  # reproductor de musica
+from Game import Game # Doc .py para manejar el puerto serial
+
 
 """	
 Global variables
@@ -32,21 +34,34 @@ Global variables
 robot_info = [] #Aqui se guardan los datos del robot
 
 """
-Funcion que carga la imagen de fondo
-"""
-def Fondo(img):  
-    ruta = os.path.join("Adicionales",img) 
-    imagen = PhotoImage(file=ruta)
-    return imagen 
+--> Clase que contiene los metodos para el robot
+-> Contiene como metodos o funciones: 
+Window: ventana principal
+Y tambien todas las ordenes que se le pueden dar al robot, como "presentacion","forward","backward",
+"pay_stop" y "explosion"
+"""  
 
-def Imagenes(img,size):
-    ruta = None
-    if size != None:
-        ruta = PIL.Image.open("Adicionales/"+img).resize((size))
-    else:
-        ruta = PIL.Image.open("Adicionales/"+img)
-    imagen = ImageTk.PhotoImage(ruta)
-    return imagen              
+class RobotArduino:
+    def __init__(self,COM,baudrate):
+        self.__serial = DriverSerial(COM, baudrate) 
+        self.__window = None
+
+    """
+    Funcion que carga la imagen de fondo
+    """
+    def Fondo(self,img):  
+        ruta = os.path.join("Adicionales",img) 
+        imagen = PhotoImage(file=ruta)
+        return imagen 
+
+    def Imagenes(img,size):
+        ruta = None
+        if size != None:
+            ruta = PIL.Image.open("Adicionales/"+img).resize((size))
+        else:
+            ruta = PIL.Image.open("Adicionales/"+img)
+        imagen = ImageTk.PhotoImage(ruta)
+        return imagen             
 
 """
 leerRobot:Funcion que lee el archivo de texto con las caracteristica del robot
@@ -68,18 +83,9 @@ def escribirR():
         csvwriter = csv.writer(csvfile)
         csvwriter.writerows(robot_info)
 
-"""
---> Clase que contiene los metodos para el robot
--> Contiene como metodos o funciones: 
-Window: ventana principal
-Y tambien todas las ordenes que se le pueden dar al robot, como "presentacion","forward","backward",
-"pay_stop" y "explosion"
-"""  
-
-class Robot:
-    def __init__(self,ventana_robot):
-        self.ventana_robot = ventana_robot
-        self.Window()
+def __start(self):
+    z=Game("COM5",9600)
+    z.main
 
     """
     Window: ventana principal
@@ -89,91 +95,91 @@ class Robot:
     """	
     def Window(self):
         self.Img = Fondo("fondo.png") 
-        self.LblFondo = Label(self.ventana_robot, image = self.Img).place(x = 0,y = 0)
+        self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)  
 
         if  1 == int(robot_info[0][1]): 
 
             self.robot1 = Imagenes("normal.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
             time.sleep(1)
             self.robot1 = Imagenes("derecha 1.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
             time.sleep(0.05)
             self.robot1 = Imagenes("normal.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
             time.sleep(0.05)
-            self.ventana_robot.update()
+            self.__window.update()
         
         elif int(robot_info[0][1]) == 2: 
 
             self.robot1 = Imagenes("derecha.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
             time.sleep(0.05)  
             self.robot1 = Imagenes("derecha 1.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
             time.sleep(0.05)
             self.robot1 = Imagenes("normal.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
 
         elif int(robot_info[0][1]) == 3: 
 
             self.robot1 = Imagenes("derecha 1.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
             time.sleep(0.05)
             self.robot1 = Imagenes("normal.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
         
         elif int(robot_info[0][1]) == 4:
 
             self.robot1 = Imagenes("izquierda.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
             time.sleep(0.05)
             self.robot1 = Imagenes("normal.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
 
               
         elif int(robot_info[0][1]) == 5:
 
             self.robot1 = Imagenes("zoom.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
-            time.sleep(0.05)
+            self.__window.update()
+            time.sleep(0.5)
             self.robot1 = Imagenes("normal.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
         
         elif int(robot_info[0][1]) == 6:
 
             self.robot1 = Imagenes("atras.png",(250,250))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
-            time.sleep(0.05)
+            self.__window.update()
+            time.sleep(0.5)
             self.robot1 = Imagenes("normal.png",(400,400))
-            self.IMG = Label(self.ventana_robot, image = self.robot1)
+            self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
-            self.ventana_robot.update()
+            self.__window.update()
 
     """
     presentacion: Funcion que hace que el robot se presente	
@@ -187,39 +193,39 @@ class Robot:
         pygame.mixer.music.play()
 
         self.robot1 = Imagenes("normal.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.05)
         self.robot1 = Imagenes("derecha.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.05)  
         self.robot1 = Imagenes("derecha 1.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.05)
         robot_info[0][1] = 3
         escribirR
         self.robot1 = Imagenes("normal.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         robot_info[0][1] = 1
         escribirR()
         time.sleep(0.05)
 
-        self.Nombre = Label(self.ventana_robot, font=("Arial ",20), text="Nombre: " + robot_info[0][0]
+        self.Nombre = Label(self.__window, font=("Arial ",20), text="Nombre: " + robot_info[0][0]
             ,height = 1,width = 15,bg = "DeepSkyBlue4",fg = "black",justify = "left",relief = "ridge")
         self.Nombre.place(x = 50, y = 50)
 
-        self.Fecha = Label(self.ventana_robot, font=("Arial ",20), text="Fecha de creacion: " + robot_info[0][2]
+        self.Fecha = Label(self.__window, font=("Arial ",20), text="Fecha de creacion: " + robot_info[0][2]
             ,height = 1,width = 35,bg = "DeepSkyBlue4",fg = "black",justify = "left",relief = "ridge")
         self.Fecha.place(x = 250, y = 50)
         time.sleep(2)
-        self.ventana_robot.update()
+        self.__window.update()
 
     """
     forward: Funcion que hace que el robot se mueva hacia adelante
@@ -234,21 +240,21 @@ class Robot:
         pygame.mixer.music.play()
 
         self.robot1 = Imagenes("normal.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.05)
         self.robot1 = Imagenes("zoom.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.5)
         robot_info[0][1] = 5
         escribirR()
         self.robot1 = Imagenes("normal.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         robot_info[0][1] = 1
         escribirR()
 
@@ -265,21 +271,21 @@ class Robot:
         pygame.mixer.music.play()
         
         self.robot1 = Imagenes("normal.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(1)
         self.robot1 = Imagenes("atras.png",(250,250))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.5)
         robot_info[0][1] = 6
         escribirR()
         self.robot1 = Imagenes("normal.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         robot_info[0][1] = 1
         escribirR()
     
@@ -291,7 +297,7 @@ class Robot:
         else:
             pygame.mixer.music.stop()
 
-    #Funcion definida por el grupo
+    #Funcion adicional solicitada por el profesor
     """
     explocion: Funcion que hace que el robot explote
     E: self
@@ -306,49 +312,60 @@ class Robot:
 
         
         self.robot1 = Imagenes("explo 1.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 200, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 9
         escribirR()
         self.robot1 = Imagenes("explo 2.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 200, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 10
         escribirR()
         self.robot1 = Imagenes("explo 3.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 200, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 11
         escribirR()
         self.robot1 = Imagenes("explo 4.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 200, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 12
         escribirR()
         self.robot1 = Imagenes("explo 5.png",(400,400))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 200, y = 250)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 13
         escribirR()
         self.robot1 = Imagenes("explo 6.png",(800,700))
-        self.IMG = Label(self.ventana_robot, image = self.robot1)
+        self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 0, y = 0)
-        self.ventana_robot.update()
+        self.__window.update()
         time.sleep(0.5)
         robot_info[0][1] = 14
         escribirR()
 
-        self.ventana_robot.destroy()
+        def ventana(self):
+
+            self.__window.destroy()
+
+            self.__window = Tk()
+            self.__window.title("Robot")
+            self.__window.geometry("600x600")
+            self.__window.resizable(0,0)
+            self.__window.configure(background="black")
+            self.__window.iconbitmap("Adicionales/robot.ico")
+            self.__window.protocol("WM_DELETE_WINDOW", self.closeSerial)
+            self.__window.mainloop()
 
 #Parte final del codigo, aqui se implementa las condiciones para abri y cerrar la simulacion, ademas tambien se establece 
                 #las funciones que se ejecutaran al mismo tiempo que el codigo
@@ -367,15 +384,7 @@ def close ():
 """
 Lo que se ejecuta apenas se corre el codigo de las clases
 """
+x = RobotArduino()
+x.ventana()
 
-#Ventana principal
-window = Tk()
-window.geometry('1200x700+75+0') #Tamaño de la ventana
-window.title("Robot Simulator using Arduiino Software") #Titulo de la ventana
-window.iconbitmap('Adicionales/robot.ico') #Añade un icono distinto
-window.resizable(False,False) #No permite cambiar el tamaño de la ventana
-window_1 = Robot(window)
 
-window.protocol ("WM_DELETE_WINDOW", close) #Funcion que se ejecuta al cerrar la ventana
-
-window.mainloop() 
