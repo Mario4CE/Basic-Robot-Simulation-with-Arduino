@@ -1,6 +1,5 @@
 # Reference: https://pyserial.readthedocs.io/en/latest/shortintro.html
 import serial
-
 """
 class DriverSerial: esta clase se encarga de manejar la comunicación serial, comunicacion entre Arduino y Python
 metedos:
@@ -13,16 +12,14 @@ metedos:
 """
 class DriverSerial:
     def __init__(self, port, baudrate):
-        self.__serial = serial.Serial("COM5",9600)
-        #self.__serial = serial.Serial(port,baudrate)
+        #self.__serial = serial.Serial("COM4",9600)
+        self.__serial = serial.Serial(port,baudrate)
         
 
     def read_bytes(self): #Funcion encargada de la lectura de el byte proveniente del puerto USB
         if self.__serial.inWaiting() > 0: #Revisa que el puerto este recibiendo datos
-            command = self.__serial.readline() #Entonces le asigna ala variable command la lectura del puerto
-            #arduino.open()
-            #Comparacion de commands para realizar su respectiva funcion
-            print(command)
+            command = self.__serial.read() #Entonces le asigna ala variable command la lectura del puerto
+            arduino.open()
             return command 
 
     
@@ -45,7 +42,8 @@ class DriverSerial:
     def open(self):
         self.__serial.open()
 
-
-ser= DriverSerial('COM5',9600)           
+"""
+ser= DriverSerial('COM4',9600)           
 while(True):
-    ser.read()
+  ser.read()
+  """
