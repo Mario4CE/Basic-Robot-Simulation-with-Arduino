@@ -28,6 +28,8 @@ import pygame  # reproductor de musica
 from DriverSerial import DriverSerial # Doc .py para manejar el puerto serial
 from threading import Thread # Hilos
 import threading
+import sys
+import serial
 
 """	
 Global variables
@@ -40,12 +42,14 @@ robot_info = [] #Aqui se guardan los datos del robot
 Window: ventana principal
 Y tambien todas las ordenes que se le pueden dar al robot, como "presentacion","forward","backward",
 "pay_stop" y "explosion"
+Ademas de los metodos del puerto serial
 """  
 
 class RobotArduino:
     def __init__(self,COM,baudrate):
         self.__serial = DriverSerial(COM, baudrate) 
         self.__window = None
+        self.play = False
 
     """
     Funcion que carga la imagen de fondo
@@ -94,7 +98,7 @@ class RobotArduino:
         self.__window = Tk()
         self.__window.title("Robot")
         self.__window.geometry('1200x700+50+0')
-        self.__window.resizable(0,0)
+        self.__window.resizable(False,False)
         self.__window.configure(background="black")
         self.__window.iconbitmap("Adicionales/robot.ico")
 
@@ -205,7 +209,7 @@ class RobotArduino:
         
         elif int(robot_info[0][1]) == 6:
 
-            self.robot1 = self.Imagenes("atras.png",(250,250))
+            self.robot1 = self.Imagenes("atras.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 500, y = 250)
             self.__window.update()
@@ -223,57 +227,60 @@ class RobotArduino:
         elif int(robot_info[0][1]) == 9:
                 
             pygame.mixer.init()
-            pygame.mixer.music.load('Adicionales/explosion.mp3')
+            pygame.mixer.music.load('Adicionales/explosion sonido.mp3')
             pygame.mixer.music.play()
 
             
             self.robot1 = self.Imagenes("explo 1.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 9
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 2.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 10
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 3.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 11
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 4.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 12
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 5.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 13
-            self.escribirRR()
+            self.escribirR()
 
-            self.robot1 = self.Imagenes("explo 6.png",(800,700))
+            self.robot1 = self.Imagenes("explo 6.png",(1200,700))
             self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 0, y = 0)
             self.__window.update()
             time.sleep(0.5)
             robot_info[0][1] = 14
-            self.escribirRR()
+            self.escribirR()
+
+            self.Img = self.Fondo("fondo.png") 
+            self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)
 
             self.robot1 = self.Imagenes("normal.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
@@ -286,43 +293,46 @@ class RobotArduino:
 
             self.robot1 = self.Imagenes("explo 2.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 10
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 3.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 11
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 4.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 12
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 5.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 13
-            self.escribirRR()
+            self.escribirR()
 
-            self.robot1 = self.Imagenes("explo 6.png",(800,700))
+            self.robot1 = self.Imagenes("explo 6.png",(1200,700))
             self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 0, y = 0)
             self.__window.update()
             time.sleep(0.5)
             robot_info[0][1] = 14
-            self.escribirRR()
+            self.escribirR()
+
+            self.Img = self.Fondo("fondo.png") 
+            self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)
 
             self.robot1 = self.Imagenes("normal.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
@@ -335,27 +345,27 @@ class RobotArduino:
 
             self.robot1 = self.Imagenes("explo 3.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 11
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 4.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 12
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 5.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 13
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 6.png",(800,700))
             self.IMG = Label(self.__window, image = self.robot1)
@@ -363,7 +373,10 @@ class RobotArduino:
             self.__window.update()
             time.sleep(0.5)
             robot_info[0][1] = 14
-            self.escribirRR()
+            self.escribirR()
+
+            self.Img = self.Fondo("fondo.png") 
+            self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)
 
             self.robot1 = self.Imagenes("normal.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
@@ -376,27 +389,30 @@ class RobotArduino:
 
             self.robot1 = self.Imagenes("explo 4.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 12
-            self.escribirRR()
+            self.escribirR()
 
             self.robot1 = self.Imagenes("explo 5.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 13
-            self.escribirRR()
+            self.escribirR()
 
-            self.robot1 = self.Imagenes("explo 6.png",(800,700))
+            self.robot1 = self.Imagenes("explo 6.png",(1200,700))
             self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 0, y = 0)
             self.__window.update()
             time.sleep(0.5)
             robot_info[0][1] = 14
-            self.escribirRR()
+            self.escribirR()
+
+            self.Img = self.Fondo("fondo.png") 
+            self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)
 
             self.robot1 = self.Imagenes("normal.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
@@ -409,19 +425,22 @@ class RobotArduino:
 
             self.robot1 = self.Imagenes("explo 5.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 200, y = 250)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.02)
             robot_info[0][1] = 13
-            self.escribirRR()
+            self.escribirR()
 
-            self.robot1 = self.Imagenes("explo 6.png",(800,700))
+            self.robot1 = self.Imagenes("explo 6.png",(1200,700))
             self.IMG = Label(self.__window, image = self.robot1)
-            self.IMG.place(x = 0, y = 0)
+            self.IMG.place(x = 500, y = 250)
             self.__window.update()
             time.sleep(0.5)
             robot_info[0][1] = 14
-            self.escribirRR()
+            self.escribirR()
+
+            self.Img = self.Fondo("fondo.png") 
+            self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)
 
             self.robot1 = self.Imagenes("normal.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
@@ -432,13 +451,16 @@ class RobotArduino:
         
         elif int(robot_info[0][1]) == 14:
 
-            self.robot1 = self.Imagenes("explo 6.png",(800,700))
+            self.robot1 = self.Imagenes("explo 6.png",(1200,700))
             self.IMG = Label(self.__window, image = self.robot1)
             self.IMG.place(x = 0, y = 0)
             self.__window.update()
             time.sleep(0.5)
             robot_info[0][1] = 14
-            self.escribirRR()
+            self.escribirR()
+
+            self.Img = self.Fondo("fondo.png") 
+            self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)
 
             self.robot1 = self.Imagenes("normal.png",(400,400))
             self.IMG = Label(self.__window, image = self.robot1)
@@ -446,8 +468,6 @@ class RobotArduino:
             robot_info[0][1] = 1
             self.escribirR()
             self.__window.update()
-               
-        self.__window.mainloop()
 
             
 
@@ -473,7 +493,7 @@ class RobotArduino:
         self.__window.update()
         time.sleep(0.05)  
         robot_info[0][1] = 2
-        self.escribirRR()
+        self.escribirR()
 
         self.robot1 = self.Imagenes("derecha 1.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
@@ -481,14 +501,14 @@ class RobotArduino:
         self.__window.update()
         time.sleep(0.05)
         robot_info[0][1] = 3
-        self.escribirRR
+        self.escribirR()
 
         self.robot1 = self.Imagenes("normal.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
         self.__window.update()
         robot_info[0][1] = 1
-        self.escribirRR()
+        self.escribirR()
         time.sleep(0.05)
 
         self.Nombre = Label(self.__window, font=("Arial ",20), text="Nombre: " + robot_info[0][0]
@@ -497,7 +517,7 @@ class RobotArduino:
 
         self.Fecha = Label(self.__window, font=("Arial ",20), text="Fecha de creacion: " + robot_info[0][2]
             ,height = 1,width = 35,bg = "DeepSkyBlue4",fg = "black",justify = "left",relief = "ridge")
-        self.Fecha.place(x = 250, y = 50)
+        self.Fecha.place(x = 300, y = 50)
         time.sleep(2)
         self.__window.update()
 
@@ -524,14 +544,14 @@ class RobotArduino:
         self.__window.update()
         time.sleep(0.5)
         robot_info[0][1] = 5
-        self.escribirRR()
+        self.escribirR()
 
         self.robot1 = self.Imagenes("normal.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
         self.__window.update()
         robot_info[0][1] = 1
-        self.escribirRR()
+        self.escribirR()
 
     """
     backward: Funcion que hace que el robot se mueva hacia atras
@@ -551,27 +571,29 @@ class RobotArduino:
         self.__window.update()
         time.sleep(1)
 
-        self.robot1 = self.Imagenes("atras.png",(250,250))
+        self.robot1 = self.Imagenes("atras.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
         self.__window.update()
         time.sleep(0.5)
         robot_info[0][1] = 6
-        self.escribirRR()
+        self.escribirR()
 
         self.robot1 = self.Imagenes("normal.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 500, y = 250)
         self.__window.update()
         robot_info[0][1] = 1
-        self.escribirRR()
+        self.escribirR()
     
     def play_stop(self):
-        if true:
+        if self.play == False:
+            self.play = True
             pygame.mixer.init()
             pygame.mixer.music.load('Adicionales/Welcome to the Jungle.mp3')
             pygame.mixer.music.play()
         else:
+            self.play = False
             pygame.mixer.music.stop()
 
     #Funcion adicional solicitada por el profesor
@@ -590,99 +612,137 @@ class RobotArduino:
         
         self.robot1 = self.Imagenes("explo 1.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
-        self.IMG.place(x = 200, y = 250)
+        self.IMG.place(x = 500, y = 250)
         self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 9
-        self.escribirRR()
+        self.escribirR()
 
         self.robot1 = self.Imagenes("explo 2.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
-        self.IMG.place(x = 200, y = 250)
+        self.IMG.place(x = 500, y = 250)
         self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 10
-        self.escribirRR()
+        self.escribirR()
 
         self.robot1 = self.Imagenes("explo 3.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
-        self.IMG.place(x = 200, y = 250)
+        self.IMG.place(x = 500, y = 250)
         self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 11
-        self.escribirRR()
+        self.escribirR()
 
         self.robot1 = self.Imagenes("explo 4.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
-        self.IMG.place(x = 200, y = 250)
+        self.IMG.place(x = 500, y = 250)
         self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 12
-        self.escribirRR()
+        self.escribirR()
 
         self.robot1 = self.Imagenes("explo 5.png",(400,400))
         self.IMG = Label(self.__window, image = self.robot1)
-        self.IMG.place(x = 200, y = 250)
+        self.IMG.place(x = 500, y = 250)
         self.__window.update()
         time.sleep(0.02)
         robot_info[0][1] = 13
-        self.escribirRR()
+        self.escribirR()
 
-        self.robot1 = self.Imagenes("explo 6.png",(800,700))
+        self.robot1 = self.Imagenes("explo 6.png",(1200,700))
         self.IMG = Label(self.__window, image = self.robot1)
         self.IMG.place(x = 0, y = 0)
         self.__window.update()
         time.sleep(0.5)
         robot_info[0][1] = 14
-        self.escribirRR()
-    
-        self.__window.mainloop()
-    
-            
-#Funcion principal
+        self.escribirR()
+        self.__window.update()  
+
+
+    """
+    Funcion que cierra la ventana y apaga el programa
+    E: self
+    S: Cerrar la ventana y apagar el programa
+    R: No aplica
+    """
+    def close(self):
+        self.__window.destroy()
+        self.__window.quit()
+        sys.exit()
+
+    """
+    readSerial: Funcion que lee el puerto serial
+    E: self
+    S: Lectura del puerto serial
+    R: -
+    """
     def readSerial(self):
         while(True):
-            command= self.__serial.read()
+            command = self.__serial.read()
             self.__compareSerial(command)
 
+    """
+    sendSerial: Funcion que envia el puerto serial
+    E: self
+    S: Envio del puerto serial
+    R: -
+    """
     def sendSerial(self):
-        command= self.__serial.send('hola'.encode())
+        command = self.__serial.send('hola'.encode())
 
-    def th_receiveData(self):
-        th_time=Thread(target = self.readSerial, args=())
-        th_time.start()
-
-    def th_sendData(self):
-        th_time=Thread(target = self.sendSerial, args=())
-        th_time.start()
-
+    """
+    closeSerial: Funcion que cierra el puerto serial
+    E: self
+    S: Cierre del puerto serial
+    R: -
+    """
     def closeSerial(self):
         self.__serial.close()
 
     """
     __compareSerial: Funcion que compara el comando recibido con los comandos que se pueden ejecutar
+    E: el comando
+    R: _
+    S: la accion dada
     """
     def __compareSerial(self, command):
-        if(command!=None):
-            if(command =='B1\r\n'):
+        if(command != None):
+            if(command == 'B1\r\n'):
                 print("PRESENTACION")
+                th_time = Thread(target = self.sendSerial, args=()) 
+                th_time.start()
                 self.presentacion()
                 
-            elif(command=="B2\r\n"):
+            elif(command == "B2\r\n"):
                 print("BACKWARD")
+                th_time = Thread(target = self.sendSerial, args=()) 
+                th_time.start()
                 self.backward()
                 
-            elif(command=="B3\r\n"):
+            elif(command == "B3\r\n"):
                 print("FORWARD")
+                self.sendSerial()
                 self.forward()
                 
-            elif(command=="B4\r\n"):
+            elif(command == "B4\r\n"):
                 print("PLAY|STOP")
-                self.play_stop()
+                th_time = Thread(target = self.sendSerial, args=()) 
+                th_time.start()
+                self.play_stop()  
                             
-            elif(command=="B5\r\n"):
+            elif(command == "B5\r\n"):
                 print("EXPLOSION")
-                self.explocion()
+                th_time = Thread(target = self.sendSerial, args=()) 
+                th_time.start()
+                self.explocion() 
+            
+            #Boton adicional
+            elif(command == "B7\r\n"):
+                print("APAGAR")
+                self.sendSerial
+                self.close()
+
             else:
                 print(command)
 
@@ -690,11 +750,12 @@ class RobotArduino:
 Parte final del codigo, aqui se implementa las condiciones para abri y cerrar la simulacion, ademas tambien se establece 
                 las funciones que se ejecutaran al mismo tiempo que el codigo
 """
-x = RobotArduino("COM6",9600) #Se crea un objeto de la clase Robot
+x = RobotArduino("COM4",9600) #Se crea un objeto de la clase Robot
 x.leerRobot() #Se ejecuta la funcion leerRobot de la clase Robot
 x.Window() #Se ejecuta la funcion Window de la clase Robot
-x.th_receiveData() #Se ejecuta la funcion th_receiveData de la clase Robot
-x.th_sendData() #Se ejecuta la funcion th_sendData de la clase Robot
+x.readSerial() #Se ejecuta la funcion readSerial de la clase Robot
+
+
 
 
 

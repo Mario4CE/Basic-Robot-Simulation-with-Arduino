@@ -6,6 +6,7 @@ const int buttonB2 = 3;
 const int buttonB3 = 4;
 const int buttonB4 = 5;
 const int buttonB5 = 6;
+const int buttonB6 = 7;
 const int ledPin =  8;      // el pin donde se establecio la coneccion en la proto
 
 
@@ -16,6 +17,7 @@ int btnB2State = 0;
 int btnB3State = 0;
 int btnB4State = 0;
 int btnB5State = 0;
+int btnB6State = 0;
 
 void setup() {
   // Inicicia el Led como un output:
@@ -26,6 +28,7 @@ void setup() {
   pinMode(buttonB3, INPUT);
   pinMode(buttonB4, INPUT);
   pinMode(buttonB5, INPUT);
+  pinMode(buttonB6, INPUT);
   Serial.begin(9600);
   Serial.println("Inicio");
 }
@@ -42,6 +45,7 @@ void readBtn() {
   btnB3State = digitalRead(buttonB3);
   btnB4State = digitalRead(buttonB4);
   btnB5State = digitalRead(buttonB5);
+  btnB6State = digitalRead(buttonB6);
 
 
   // comprobar si el pulsador está pulsado. Si es así, el estado del botón es  HIGH:
@@ -64,6 +68,10 @@ void readBtn() {
   else if (btnB5State == HIGH) {
     // turn LED on:
     Serial.println("B5");
+  }
+  else if (btnB6State == HIGH){
+    // turn LED on:
+    Serial.println("B6");
   }
   delay(500);
 
