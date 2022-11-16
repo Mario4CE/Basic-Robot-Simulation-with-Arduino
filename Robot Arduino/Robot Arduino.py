@@ -478,6 +478,10 @@ class RobotArduino:
     R: No aplica
     """
     def presentacion(self):
+
+        self.Img = self.Fondo("fondo.png") 
+        self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)  
+
         pygame.mixer.init()
         pygame.mixer.music.load('Adicionales/BB-8 sound 2.mp3')
         pygame.mixer.music.play()
@@ -529,6 +533,9 @@ class RobotArduino:
     """
     def forward(self): 
 
+        self.Img = self.Fondo("fondo.png") 
+        self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)  
+
         pygame.mixer.init()
         pygame.mixer.music.load('Adicionales/BB-8 sound 2.mp3')
         pygame.mixer.music.play()
@@ -561,6 +568,9 @@ class RobotArduino:
     """
     def backward(self):
 
+        self.Img = self.Fondo("fondo.png") 
+        self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)  
+
         pygame.mixer.init()
         pygame.mixer.music.load('Adicionales/BB-8 sound 2.mp3')
         pygame.mixer.music.play()
@@ -587,6 +597,10 @@ class RobotArduino:
         self.escribirR()
     
     def play_stop(self):
+
+        self.Img = self.Fondo("fondo.png") 
+        self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0) 
+
         if self.play == False:
             self.play = True
             pygame.mixer.init()
@@ -605,6 +619,10 @@ class RobotArduino:
     """	
 
     def explocion(self):
+
+        self.Img = self.Fondo("fondo.png") 
+        self.LblFondo = Label(self.__window, image = self.Img).place(x = 0,y = 0)  
+
         pygame.mixer.init()
         pygame.mixer.music.load('Adicionales/explosion sonido.mp3')
         pygame.mixer.music.play()
@@ -726,7 +744,7 @@ class RobotArduino:
                 self.forward()
                 
             elif(command == "B4\r\n"):
-                print("PLAY|STOP")
+                print("PLAY AND STOP")
                 th_time = Thread(target = self.sendSerial, args=()) 
                 th_time.start()
                 self.play_stop()  
@@ -738,9 +756,10 @@ class RobotArduino:
                 self.explocion() 
             
             #Boton adicional
-            elif(command == "B7\r\n"):
+            elif(command == "B6\r\n"):
                 print("APAGAR")
-                self.sendSerial
+                th_time = Thread(target = self.sendSerial, args=()) 
+                th_time.start()
                 self.close()
 
             else:
@@ -750,7 +769,7 @@ class RobotArduino:
 Parte final del codigo, aqui se implementa las condiciones para abri y cerrar la simulacion, ademas tambien se establece 
                 las funciones que se ejecutaran al mismo tiempo que el codigo
 """
-x = RobotArduino("COM4",9600) #Se crea un objeto de la clase Robot
+x = RobotArduino("COM7",9600) #Se crea un objeto de la clase Robot
 x.leerRobot() #Se ejecuta la funcion leerRobot de la clase Robot
 x.Window() #Se ejecuta la funcion Window de la clase Robot
 x.readSerial() #Se ejecuta la funcion readSerial de la clase Robot
